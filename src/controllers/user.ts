@@ -2,6 +2,7 @@ import Request from "../types/Request";
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import User from "../models/User";
+import UserSchema from "../schemas/User";
 
 export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -16,13 +17,14 @@ export const getUserById = async (req: Request, res: Response) => {
 };
 
 export const updateUser = async (req: Request, res: Response) => {
-  const { name, email } = req.body;
+  const { error, value } = UserSchema.validate(req.body);
 
-  if (!name || !email) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "Missing required fields" });
+  if (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({ msg: error.message });
+    return;
   }
+
+  const { name, email } = value;
 
   const user = await User.findOne({ _id: req.userId });
 

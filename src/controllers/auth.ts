@@ -1,16 +1,17 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import { StatusCodes } from "http-status-codes";
+import UserSchema from "../schemas/User";
 
 export const register = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const { error, value } = UserSchema.validate(req.body);
 
-  //TODO: customize errors with error message and status code
-  if (!name || !email || !password) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "Missing required fields" });
+  if (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({ msg: error.message });
+    return;
   }
+
+  const { name, email, password } = value;
 
   const userExists = await User.findOne({ email });
   if (userExists) {
@@ -31,13 +32,14 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { error, value } = UserSchema.validate(req.body);
 
-  if (!email || !password) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "Missing required fields" });
+  if (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({ msg: error.message });
+    return;
   }
+
+  const { email, password } = value;
 
   const user = await User.findOne({ email }).select("+password");
   if (!user) {
