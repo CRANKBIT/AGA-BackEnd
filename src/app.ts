@@ -38,9 +38,7 @@ const start = async (): Promise<void> => {
     app.listen(port, () =>
       console.log(
         `Server is started on ${
-          process.env.SERVER_URL
-            ? process.env.SERVER_URL
-            : `http://localhost:${port}`
+          process.env.SERVER_URL || `http://localhost:${port}`
         }`
       )
     );

@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: ['main']
 env:
-  NODE_ENV: production
+  NODE_ENV: development
   MONGO_URI: ${{ secrets.MONGO_URI }}
   JWT_SECRET: jwtsecret
   JWT_LIFETIME: 1d
