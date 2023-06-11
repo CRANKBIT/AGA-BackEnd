@@ -9,7 +9,7 @@
     "start:pm2": "pm2 start dist/app.js",
     "build": "tsc",
     "clean": "rm -rf dist",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "lint": "eslint --ext .ts, src/ --no-cache",
     "lint:f": "eslint --ext .ts, src/ --fix --no-cache",
     "prettier:f": "prettier --write .",
