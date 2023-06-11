@@ -24,7 +24,7 @@ jobs:
         run: |
           yarn set version stable
           yarn
-          CI='' yarn pre-commit
+          CI=false yarn pre-commit
           yarn test
           yarn build
           yarn start:pm2
