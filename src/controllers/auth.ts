@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { User } from '../models/Tenant'
+import { Tenant } from '../models/Tenant'
 import UserSchema from '../schemas/Tenant'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -13,12 +13,12 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
   const { name, email, password } = value
 
-  const userExists = await User.findOne({ email })
+  const userExists = await Tenant.findOne({ email })
   if (userExists) {
     res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Please provide another valid email address' })
   }
 
-  const user = await User.create({ name, email, password })
+  const user = await Tenant.create({ name, email, password })
   const token = user.createJwt()
   res.status(StatusCodes.CREATED).json({
     user: {
@@ -40,7 +40,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
   const { email, password } = value
 
-  const user = await User.findOne({ email }).select('+password')
+  const user = await Tenant.findOne({ email }).select('+password')
   if (!user) {
     res.status(StatusCodes.UNAUTHORIZED).json({ msg: 'Invalid credentials' })
   }
