@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { User } from '../models/User'
-import UserSchema from '../schemas/User'
+import { User } from '../models/Tenant'
+import UserSchema from '../schemas/Tenant'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   const { error, value } = UserSchema.validate(req.body)

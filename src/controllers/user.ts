@@ -1,14 +1,14 @@
 import { Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import Request from '../types/Request'
-import { User } from '../models/User'
-import UserSchema from '../schemas/User'
+import { Tenant } from '../models/Tenant'
+import TenantSchema from '../schemas/Tenant'
 
 export const getUserById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params
 
   try {
-    const user = await User.findById(id)
+    const user = await Tenant.findById(id)
 
     res.status(StatusCodes.OK).json(user)
   } catch (err) {
@@ -17,7 +17,7 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
 }
 
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
-  const { error, value } = UserSchema.validate(req.body)
+  const { error, value } = TenantSchema.validate(req.body)
 
   if (error) {
     res.status(StatusCodes.BAD_REQUEST).json({ msg: error.message })
@@ -26,7 +26,7 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
 
   const { name, email } = value
 
-  const user = await User.findOne({ _id: req.userId })
+  const user = await Tenant.findOne({ _id: req.userId })
 
   user.name = name
   user.email = email
