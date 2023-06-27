@@ -27,6 +27,11 @@ app.get('/health-check', (request, response) => response.status(200).send({ mess
 // swagger api docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsDoc))
 
+app.get('/docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json')
+  res.send(swaggerJsDoc)
+})
+
 // TODO: error handler
 const port = process.env.PORT || 5000
 
