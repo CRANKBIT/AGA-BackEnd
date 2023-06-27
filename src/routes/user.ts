@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { getUserById, updateUser } from '../controllers/tenant'
+import { getTenantById, updateUser } from '../controllers/tenant'
 
 const userRouter = Router()
 
-userRouter.route('/:id').get(getUserById).patch(updateUser)
+userRouter.route('/:id').get(getTenantById).patch(updateUser)
 
 export default userRouter
