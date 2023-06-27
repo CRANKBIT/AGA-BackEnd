@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import Payload from '../types/Payload'
 import Request from '../types/Request'
 
-const authenticateUser = (req: Request, res: Response, next: NextFunction): void => {
+const authenticateTenant = (req: Request, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization
   if (!authHeader || !authHeader.startsWith('Bearer')) {
     throw new Error('Authentication Invalid')
@@ -23,16 +23,16 @@ const authenticateUser = (req: Request, res: Response, next: NextFunction): void
 
     let payload: Payload
     if (typeof verifiedToken === 'string') {
-      payload = { userId: verifiedToken }
+      payload = { tenantId: verifiedToken }
     } else {
       payload = verifiedToken
     }
 
-    req.userId = payload.userId
+    req.tenantId = payload.tenantId
     next()
   } catch (err) {
     res.status(HttpStatusCodes.FORBIDDEN).json({ msg: 'Authorization invalid' })
   }
 }
 
-export default authenticateUser
+export default authenticateTenant

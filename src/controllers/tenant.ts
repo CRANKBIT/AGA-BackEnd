@@ -16,7 +16,7 @@ export const getTenantById = async (req: Request, res: Response): Promise<void> 
   }
 }
 
-export const updateUser = async (req: Request, res: Response): Promise<void> => {
+export const updateTenant = async (req: Request, res: Response): Promise<void> => {
   const { error, value } = TenantSchema.validate(req.body)
 
   if (error) {
@@ -26,7 +26,7 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
 
   const { name, email } = value
 
-  const tenant = await Tenant.findOne({ _id: req.userId })
+  const tenant = await Tenant.findOne({ _id: req.tenantId })
 
   tenant.name = name
   tenant.email = email
@@ -36,7 +36,7 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
   const token = tenant.createJwt()
   res.status(StatusCodes.OK).json({
     tenant: {
-      userId: tenant._id,
+      tenantId: tenant._id,
       name: tenant.name,
       email: tenant.email,
     },

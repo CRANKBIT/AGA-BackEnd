@@ -2,7 +2,7 @@ import { JwtPayload } from 'jsonwebtoken'
 
 type Payload =
   | {
-      userId: string
+      tenantId: string
     }
   | JwtPayload
 
