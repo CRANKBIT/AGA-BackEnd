@@ -1,25 +1,45 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
+import { StatusCodes } from 'http-status-codes'
+import Request from '../types/Request'
 import { Tenant } from '../models/Tenant'
+import TenantSchema from '../schemas/Tenant'
 
-const createTenant = async (req: Request, res: Response): Promise<void> => {
+export const getTenantById = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params
+
   try {
-    const { name, email, password, companies } = req.body
+    const tenant = await Tenant.findById(id)
 
-    const newTenant = new Tenant({
-      name,
-      email,
-      password,
-      companies,
-    })
-
-    await newTenant.save()
-
-    const token = newTenant.createJwt()
-
-    res.status(201).json({ message: 'Tenant created successfully', token })
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to create tenant', error: error.message })
+    res.status(StatusCodes.OK).json(tenant)
+  } catch (err) {
+    res.status(StatusCodes.NOT_FOUND).json(err)
   }
 }
 
-export default createTenant
+export const updateUser = async (req: Request, res: Response): Promise<void> => {
+  const { error, value } = TenantSchema.validate(req.body)
+
+  if (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({ msg: error.message })
+    return
+  }
+
+  const { name, email } = value
+
+  const tenant = await Tenant.findOne({ _id: req.userId })
+
+  tenant.name = name
+  tenant.email = email
+
+  await tenant.save()
+
+  const token = tenant.createJwt()
+  res.status(StatusCodes.OK).json({
+    tenant: {
+      userId: tenant._id,
+      name: tenant.name,
+      email: tenant.email,
+    },
+    token,
+  })
+}

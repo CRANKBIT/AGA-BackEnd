@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getUserById, updateUser } from '../controllers/user'
+import { getUserById, updateUser } from '../controllers/tenant'
 
 const userRouter = Router()
 
