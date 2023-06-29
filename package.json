@@ -8,6 +8,7 @@
     "start": "nodemon",
     "start:node": "node dist/app.js",
     "start:pm2": "pm2 start dist/app.js",
+    "stop:pm2": "pm2 stop dist/app.js",
     "build": "tsc",
     "test": "jest --passWithNoTests",
     "clean": "rimraf dist",
