@@ -1,6 +1,4 @@
 import mongoose, { Document } from 'mongoose'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 import { ICompany } from './Company'
 
 export interface IUser extends Document {
