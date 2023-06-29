@@ -1,20 +1,32 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document, Model } from 'mongoose'
 
 export interface ICompany extends Document {
-  name: string
+  domain: string
 }
 
-const CompanySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'please enter your company'],
-  },
-  user: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+export const createCompanySchema = (connection: mongoose.Connection): Model<ICompany> => {
+  const CompanySchema = new mongoose.Schema({
+    domain: {
+      type: String,
+      required: [true, 'Please enter your company name'],
+      unique: true,
+      validate: {
+        validator(value: string): boolean {
+          const pattern = /^[A-Za-z0-9_-]+\.crankbit\.net$/
+          return pattern.test(value)
+        },
+        message: 'Please provide a valid domain name',
+      },
+      minlength: 3,
+      maxlength: 30,
     },
-  ],
-})
+    user: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+  })
 
-export const Company = mongoose.model<ICompany>('Company', CompanySchema)
+  return connection.model<ICompany>('Company', CompanySchema)
+}

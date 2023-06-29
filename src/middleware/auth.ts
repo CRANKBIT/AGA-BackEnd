@@ -29,6 +29,7 @@ const authenticateTenant = (req: Request, res: Response, next: NextFunction): vo
     }
 
     req.tenantId = payload.tenantId
+
     next()
   } catch (err) {
     res.status(HttpStatusCodes.FORBIDDEN).json({ msg: 'Authorization invalid' })
