@@ -25,9 +25,10 @@ export const updateTenant = async (req: Request, res: Response): Promise<void> =
   }
 
   const { name, email } = value
+  console.log(TenantSchema.validate(req.body), 'this is value')
 
   const tenant = await Tenant.findOne({ _id: req.tenantId })
-
+  console.log(tenant, 'this is tenant')
   tenant.name = name
   tenant.email = email
 

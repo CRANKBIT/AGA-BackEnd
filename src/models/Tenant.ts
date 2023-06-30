@@ -14,7 +14,7 @@ export interface ITenant extends Document {
 const TenantSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'please enter your name'],
+    required: [false, 'please enter your name'],
     minlength: 3,
     maxlength: 50,
   },
@@ -51,7 +51,7 @@ TenantSchema.pre<ITenant>('save', async function () {
 })
 
 TenantSchema.methods.createJwt = function (): string {
-  return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
+  return jwt.sign({ tenantId: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_LIFETIME,
   })
 }

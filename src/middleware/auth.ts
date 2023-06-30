@@ -21,12 +21,7 @@ const authenticateTenant = (req: Request, res: Response, next: NextFunction): vo
   try {
     const verifiedToken = jwt.verify(token, process.env.JWT_SECRET)
 
-    let payload: Payload
-    if (typeof verifiedToken === 'string') {
-      payload = { tenantId: verifiedToken }
-    } else {
-      payload = verifiedToken
-    }
+    const payload: Payload = typeof verifiedToken === 'string' ? { tenantId: verifiedToken } : verifiedToken
 
     req.tenantId = payload.tenantId
 
