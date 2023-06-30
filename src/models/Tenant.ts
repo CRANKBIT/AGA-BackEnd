@@ -1,12 +1,13 @@
 import mongoose, { Document } from 'mongoose'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { ICompany } from './Company'
 
 export interface ITenant extends Document {
   name: string
   email: string
   password: string
-  companies: Array<object>
+  companies: ICompany[]
   createJwt(): string
   comparePassword(inputPassword: string): Promise<boolean>
 }
