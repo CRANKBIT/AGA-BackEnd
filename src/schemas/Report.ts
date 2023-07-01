@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-const reportSchema = Joi.object({
+const ReportSchema = Joi.object({
   vehicle: Joi.string().required(),
   name: Joi.string().min(3).max(50),
   service: Joi.string().required(),
@@ -12,4 +12,4 @@ const reportSchema = Joi.object({
   comments: Joi.array().items(Joi.string()).label('Comments'),
 })
 
-export default reportSchema
+export default ReportSchema
