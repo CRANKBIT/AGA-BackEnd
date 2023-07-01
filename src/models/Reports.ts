@@ -1,13 +1,13 @@
 import mongoose, { Document } from 'mongoose'
 
 export interface IReports extends Document {
-  name: string
+  title: string
 }
 
 const ReportSchema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
-    required: [true, 'please enter your report'],
+    required: [true, 'please enter your report title.'],
   },
 })
 
