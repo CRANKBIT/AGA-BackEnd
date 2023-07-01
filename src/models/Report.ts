@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose'
 
-export interface IReports extends Document {
+export interface IReport extends Document {
   title: string
 }
 
@@ -11,4 +11,4 @@ const ReportSchema = new mongoose.Schema({
   },
 })
 
-export const Report = mongoose.model<IReports>('Report', ReportSchema)
+export const Report = mongoose.model<IReport>('Report', ReportSchema)

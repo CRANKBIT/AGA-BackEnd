@@ -1,5 +1,6 @@
 import { Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
+import { Report } from '../models/Report'
 import Request from '../types/Request'
 import ReportSchema from '../schemas/Report'
 
@@ -14,7 +15,6 @@ const createReport = async (req: Request, res: Response): Promise<void> => {
 
     const report = await Report.create(value)
 
-    console.log(report)
     res.status(StatusCodes.CREATED).json({ report })
   } catch (error) {
     console.log(error.message)
