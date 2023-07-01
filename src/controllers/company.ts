@@ -15,13 +15,13 @@ export const createCompany = async (req: Request, res: Response): Promise<void> 
       return
     }
 
-    const { error } = CompanySchema.validate(req.body)
+    const { error, value } = CompanySchema.validate(req.body)
     if (error) {
       res.status(StatusCodes.BAD_REQUEST).json({ msg: error.message })
       return
     }
 
-    const { domain } = req.body
+    const { domain } = value
 
     const tenantsConnection = mongoose.createConnection(`${process.env.MONGO_BASE_URI}/tenants`)
     const CompanyModel = createCompanySchema(tenantsConnection)
