@@ -1,9 +1,9 @@
-import Joi from 'joi'
+import { object, string } from 'joi'
 
-const TenantSchema = Joi.object({
-  name: Joi.string().min(3).max(50),
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6),
+const TenantSchema = object({
+  name: string().min(3).max(50),
+  email: string().email().required(),
+  password: string().min(6),
 })
 
 export default TenantSchema
