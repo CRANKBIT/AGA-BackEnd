@@ -1,9 +1,9 @@
-import { object, string } from 'joi'
+import Joi from 'joi'
 
-const StaffSchema = object({
-  name: string().min(3).max(50),
-  email: string().email().required(),
-  role: string(),
+const StaffSchema = Joi.object({
+  name: Joi.string().min(3).max(50),
+  email: Joi.string().email().required(),
+  role: Joi.string(),
 })
 
 export default StaffSchema
