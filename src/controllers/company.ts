@@ -70,6 +70,12 @@ export const getCompanyById = async (req: Request, res: Response): Promise<void>
 
     const { id } = req.params
     const company = tenant.companies.find((comp) => comp._id.toString() === id)
+
+    if (!company) {
+      res.status(StatusCodes.NOT_FOUND).json({ msg: 'Company not found' })
+      return
+    }
+
     res.status(StatusCodes.OK).json(company)
   } catch (error) {
     res.status(StatusCodes.NOT_FOUND).json(error)
