@@ -39,7 +39,11 @@ export const createCompany = async (req: Request, res: Response): Promise<void> 
 
     const companyConnection = mongoose.createConnection(`${process.env.MONGO_BASE_URI}/${domain.split('.')[0]}`)
     const CompanyDBModel = createCompanySchema(companyConnection)
-    await CompanyDBModel.create({ _id: company._id, domain })
+
+    await CompanyDBModel.create({
+      _id: company._id,
+      domain,
+    })
 
     res.status(StatusCodes.CREATED).json({
       tenant: {
