@@ -44,3 +44,21 @@ export const updateTenant = async (req: Request, res: Response): Promise<void> =
     token,
   })
 }
+
+export const isTenantLoggedIn = async (req: Request, res: Response): Promise<void> => {
+  const { tenantId } = req
+
+  try {
+    const tenant = await Tenant.findById(tenantId)
+
+    const isLoggedIn = tenant !== null
+
+    res.status(StatusCodes.OK).json({
+      isLoggedIn,
+    })
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: 'Internal Server Error',
+    })
+  }
+}

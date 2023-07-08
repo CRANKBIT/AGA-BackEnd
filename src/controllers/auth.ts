@@ -54,9 +54,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
   const token = tenant.createJwt()
   tenant.password = undefined
+  localStorage.setItem('token', token)
+
   res.status(StatusCodes.OK).json({
     tenant: {
-      userId: tenant._id,
+      tenantId: tenant._id,
       name: tenant.name,
       email: tenant.email,
     },
