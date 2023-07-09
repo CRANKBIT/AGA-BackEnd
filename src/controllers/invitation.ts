@@ -16,10 +16,7 @@ function generateInvitationLink(companyUrl: string): string {
   return invitationLink
 }
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-
-// Send the invitation email
-function sendInvitationEmail(email: string, invitationLink: string): void {
+export async function sendInvitationEmail(email: string, invitationLink: string): Promise<void> {
   const msg = {
     to: email,
     from: 'your-email@example.com',
@@ -28,19 +25,22 @@ function sendInvitationEmail(email: string, invitationLink: string): void {
     html: `<p>You have been invited to join our company. Please click the following link to accept the invitation and access our platform:</p><a href="${invitationLink}">${invitationLink}</a>`,
   }
 
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log('Email sent')
-    })
-    .catch((error: Error) => {
-      console.error('Error sending email:', error)
-    })
+  try {
+    await sgMail.send(msg)
+    console.log('Email sent')
+  } catch (error) {
+    console.error('Error sending email:', error)
+  }
 }
 
-// Usage example
-const companyUrl = 'https://example.com' // need to change later
-const invitationLink = generateInvitationLink(companyUrl)
+export async function sendInvitationEmailAndHandleErrors(): Promise<void> {
+  try {
+    const companyUrl = 'https://example.com' // need to change later
+    const invitationLink = generateInvitationLink(companyUrl)
 
-const email = 'recipient@example.com' // need to change later
-sendInvitationEmail(email, invitationLink)
+    const recipientEmail = 'recipient@example.com' // need to change later
+    await sendInvitationEmail(recipientEmail, invitationLink)
+  } catch (error) {
+    console.error('An error occurred while sending invitation email:', error)
+  }
+}
