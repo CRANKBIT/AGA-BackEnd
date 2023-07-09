@@ -15,7 +15,7 @@ const authenticateTenant = (req: Request, res: Response, next: NextFunction): vo
 
   const token = authHeader.split(' ')[1]
 
-  if (token == null) {
+  if (!token) {
     res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Authorization denied' })
     return
   }
