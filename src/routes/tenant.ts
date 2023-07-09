@@ -1,8 +1,9 @@
 import { Router } from 'express'
-import { getTenantById, updateTenant, isTenantLoggedIn } from '../controllers/tenant'
+import { getTenantById, updateTenant, checkLogin } from '../controllers/tenant'
 
 const tenantRouter = Router()
 
 tenantRouter.route('/:id').get(getTenantById).patch(updateTenant)
-tenantRouter.route('/is-logged-in').get(isTenantLoggedIn)
+tenantRouter.route('/check-login').get(checkLogin)
+
 export default tenantRouter
