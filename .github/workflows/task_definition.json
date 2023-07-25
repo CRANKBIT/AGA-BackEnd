@@ -1,33 +1,41 @@
 {
-  "containerDefinitions": [
-    {
+  "containerDefinitions": [{
       "name": "crankbit-backend-main",
       "image": "349498089405.dkr.ecr.ap-southeast-2.amazonaws.com/crankbit-backend-main:latest",
       "cpu": 1024,
       "memory": 2048,
-      "portMappings": [
-        {
+      "portMappings": [{
           "containerPort": 8080,
           "hostPort": 8080,
           "protocol": "tcp"
-        }
-      ],
+      }],
       "essential": true,
       "environment": [],
       "mountPoints": [],
-      "volumesFrom": []
-    }
-  ],
+      "volumesFrom": [],
+      "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+              "awslogs-create-group": "true",
+              "awslogs-group": "/ecs/awslogs/Crankbit-cluster-main",
+              "awslogs-region": "ap-southeast-2",
+              "awslogs-stream-prefix": "ecs"
+          }
+      }
+  }],
   "family": "crankbit_backend_task_main",
   "executionRoleArn": "arn:aws:iam::349498089405:role/ecs-task-execution-role-main",
   "networkMode": "awsvpc",
   "volumes": [],
   "placementConstraints": [],
   "runtimePlatform": {
-    "cpuArchitecture": "X86_64",
-    "operatingSystemFamily": "LINUX"
+      "cpuArchitecture": "X86_64",
+      "operatingSystemFamily": "LINUX"
   },
-  "requiresCompatibilities": ["FARGATE"],
+  "requiresCompatibilities": [
+      "FARGATE"
+  ],
   "cpu": "1024",
   "memory": "2048"
+
 }
