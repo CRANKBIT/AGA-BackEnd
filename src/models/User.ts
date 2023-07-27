@@ -1,44 +1,22 @@
-import mongoose, { Document } from 'mongoose'
-import { ICompany } from './Company'
+import { Document, Schema, model } from 'mongoose'
 
 export interface IUser extends Document {
-  name: string
-  role: string
   email: string
-  companies: ICompany[]
+  token: string
 }
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'please enter your name'],
-  },
-  role: {
-    type: String,
-    required: [true, 'please select your role'],
-  },
+const UserSchema = new Schema<IUser>({
   email: {
     type: String,
     required: [true, 'please enter your email'],
+    unique: true,
+    match: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
   },
-  companies: [
-    {
-      domain: {
-        type: String,
-        required: [true, 'please provide a company name'],
-        unique: true,
-        validate: {
-          validator(value: string): boolean {
-            const pattern = /^[A-Za-z0-9_-]+\.crankbit\.net$/
-            return pattern.test(value)
-          },
-          message: 'Please provide a valid domain name',
-        },
-        minlength: 3,
-        maxlength: 30,
-      },
-    },
-  ],
+  token: {
+    type: String,
+    required: [true, 'please provide your token'],
+  },
 })
 
-export const User = mongoose.model<IUser>('User', UserSchema)
+const UserModel = model<IUser>('User', UserSchema)
+export default UserModel
