@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { IReport } from '../models/Report'
 import reportService from '../services/reportService'
 
-export const createReportController = async (req: Request, res: Response): Promise<void> => {
+export const createReport = async (req: Request, res: Response): Promise<void> => {
   try {
     const reportData = req.body as Partial<IReport>
     const newReport = await reportService.createReport(reportData)
@@ -12,7 +12,20 @@ export const createReportController = async (req: Request, res: Response): Promi
   }
 }
 
-export const getReportByIdController = async (req: Request, res: Response): Promise<void> => {
+export const getReports = async (req: Request, res: Response): Promise<void> => {
+  // try {
+  //   const report = await reportService.getReportById()
+  //   if (!report) {
+  //     res.status(404).json({ error: 'Report not found' })
+  //   } else {
+  //     res.json(report)
+  //   }
+  // } catch (error) {
+  //   res.status(500).json({ error: 'Internal Server Error' })
+  // }
+}
+
+export const getReportById = async (req: Request, res: Response): Promise<void> => {
   try {
     const reportId = req.params.id
     const report = await reportService.getReportById(reportId)
@@ -26,7 +39,7 @@ export const getReportByIdController = async (req: Request, res: Response): Prom
   }
 }
 
-export const updateReportController = async (req: Request, res: Response): Promise<void> => {
+export const updateReportById = async (req: Request, res: Response): Promise<void> => {
   try {
     const reportId = req.params.id
     const updatedData = req.body as Partial<IReport>
@@ -41,7 +54,7 @@ export const updateReportController = async (req: Request, res: Response): Promi
   }
 }
 
-export const deleteReportController = async (req: Request, res: Response): Promise<void> => {
+export const deleteReportById = async (req: Request, res: Response): Promise<void> => {
   try {
     const reportId = req.params.id
     const deletedReport = await reportService.deleteReport(reportId)
