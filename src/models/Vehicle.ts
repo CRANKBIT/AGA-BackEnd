@@ -1,14 +1,14 @@
 import mongoose, { Document } from 'mongoose'
 
 export interface IVehicle extends Document {
-  owner: string
+  ownerName: string
   rego: string
   vin: string
   odometer: string
 }
 
 const VehicleSchema = new mongoose.Schema({
-  owner: {
+  ownerName: {
     type: String,
     required: [true, 'please enter your name'],
     minlength: 3,

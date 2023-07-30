@@ -12,10 +12,23 @@ export const createVehicleController = async (req: Request, res: Response): Prom
   }
 }
 
-export const getVehicleController = async (req: Request, res: Response): Promise<void> => {
+export const getVehicleByIDController = async (req: Request, res: Response): Promise<void> => {
   try {
     const vehicleId = req.params.id
-    const getVehicle = await vehicleService.getVehicle(vehicleId)
+    const getVehicle = await vehicleService.getVehicleByID(vehicleId)
+    if (!getVehicle) {
+      res.status(404).json({ error: 'Vehicle not found!' })
+    } else {
+      res.status(201).json(getVehicle)
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'internal server error' })
+  }
+}
+
+export const getVehiclesController = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const getVehicle = await vehicleService.getVehicles()
     if (!getVehicle) {
       res.status(404).json({ error: 'Vehicle not found!' })
     } else {

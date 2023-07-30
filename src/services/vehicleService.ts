@@ -11,9 +11,18 @@ const vehicleService = {
     }
   },
 
-  getVehicle: async (vehicleId: string): Promise<LeanDocument<IVehicle | null>> => {
+  getVehicleByID: async (vehicleId: string): Promise<LeanDocument<IVehicle | null>> => {
     try {
       const vehicle = await Vehicle.findById(vehicleId).lean().exec()
+      return vehicle
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  },
+
+  getVehicles: async (): Promise<LeanDocument<IVehicle | null>> => {
+    try {
+      const vehicle = await Vehicle.find().lean().exec()
       return vehicle
     } catch (error) {
       throw new Error(error.message)
