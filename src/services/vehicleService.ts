@@ -20,7 +20,7 @@ const vehicleService = {
     }
   },
 
-  getVehicles: async (): Promise<LeanDocument<IVehicle | null>> => {
+  getVehicles: async (): Promise<LeanDocument<IVehicle | null>[]> => {
     try {
       const vehicle = await Vehicle.find().lean().exec()
       return vehicle
