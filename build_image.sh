@@ -1,17 +1,17 @@
 #!/bin/sh
 
-# Read the values from Jenkins credentials files using cat
-MONGO_URI=$(cat "$MONGO_URI")
-JWT_SECRET=$(cat "$JWT_SECRET")
-JWT_LIFETIME=$(cat "$JWT_LIFETIME")
-JWT_SECRET_KEY=$(cat "$JWT_SECRET_KEY")
-PORT=$(cat "$PORT")
-EMAIL_SERVER_PASSWORD=$(cat "$EMAIL_SERVER_PASSWORD")
-EMAIL_SERVER_PORT=$(cat "$EMAIL_SERVER_PORT")
-EMAIL_SERVER_HOST=$(cat "$EMAIL_SERVER_HOST")
-EMAIL_FROM=$(cat "$EMAIL_FROM")
-EMAIL_SERVER_USER=$(cat "$EMAIL_SERVER_USER")
-SENDGRID_API_KEY=$(cat "$SENDGRID_API_KEY")
+# Read the values from Jenkins credentials files using echo
+MONGO_URI=$(echo "$MONGO_URI")
+JWT_SECRET=$(echo "$JWT_SECRET")
+JWT_LIFETIME=$(echo "$JWT_LIFETIME")
+JWT_SECRET_KEY=$(echo "$JWT_SECRET_KEY")
+PORT=$(echo "$PORT")
+EMAIL_SERVER_PASSWORD=$(echo "$EMAIL_SERVER_PASSWORD")
+EMAIL_SERVER_PORT=$(echo "$EMAIL_SERVER_PORT")
+EMAIL_SERVER_HOST=$(echo "$EMAIL_SERVER_HOST")
+EMAIL_FROM=$(echo "$EMAIL_FROM")
+EMAIL_SERVER_USER=$(echo "$EMAIL_SERVER_USER")
+SENDGRID_API_KEY=$(echo "$SENDGRID_API_KEY")
 
 # run docker build command with the provided environment variables
 docker build \
