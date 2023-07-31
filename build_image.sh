@@ -26,5 +26,5 @@ docker build \
   --build-arg EMAIL_FROM="${EMAIL_FROM}" \
   --build-arg EMAIL_SERVER_USER="${EMAIL_SERVER_USER}" \
   --build-arg SENDGRID_API_KEY="${SENDGRID_API_KEY}" \
-  -t crankbit:1.0.0 .
+  -t "crankbit:${BUILD_NUMBER}" .
 
