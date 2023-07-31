@@ -132,3 +132,8 @@ dist
 .env
 .yarn
 .yarnrc.yml
+
+# dockerfile
+.DS_Store
+build_image_local.sh
+crankbit.env 
