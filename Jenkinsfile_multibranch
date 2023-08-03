@@ -13,11 +13,6 @@ pipeline {
 
     }
 
-     // Execute all stages only when branch is 'uat' or 'prod'
-    when {
-        expression { branchName == 'uat' || branchName == 'prod' }
-    }
-
     stages {
 
         stage('Checkout') {
