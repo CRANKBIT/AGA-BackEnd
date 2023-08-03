@@ -1,9 +1,13 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { Tenant } from '../models/Tenant'
-import TenantSchema from '../schemas/Tenant'
+import { Tenant } from '../../models/private/Tenant'
+import TenantSchema from '../../schemas/Tenant'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
+  if (req.headers.host.split('.')[0] !== 'www') {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid host' })
+    return
+  }
   const { error, value } = TenantSchema.validate(req.body)
 
   if (error) {
@@ -33,6 +37,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 }
 
 export const login = async (req: Request, res: Response): Promise<void> => {
+  if (req.headers.host.split('.')[0] !== 'www') {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid host' })
+    return
+  }
   const { error, value } = TenantSchema.validate(req.body)
 
   if (error) {

@@ -1,13 +1,20 @@
-import mongoose, { connect } from 'mongoose'
+import mongoose from 'mongoose'
+import { createCompanySchema } from './models/private/Company'
 
 mongoose.set('strictQuery', false)
 
-const connectDB = async (MONGO_URI: string): Promise<void> => {
+const connectDB = async (): Promise<void> => {
   try {
-    if (!MONGO_URI) {
+    if (!process.env.MONGO_URI) {
       throw new Error('Please make sure that MONGO_URI is defined in .env file')
     }
-    await connect(MONGO_URI)
+    // setup www
+    const wwwConnection = mongoose.createConnection(`${process.env.MONGO_URI}${process.env.MAIN_DB_NAME || 'www'}`)
+    const CompanyModel = createCompanySchema(wwwConnection)
+    const companyExsits = await CompanyModel.findOne({ domain: 'www' })
+    if (!companyExsits) {
+      await CompanyModel.create({ domain: 'www' })
+    }
     console.log('MongoDB Connected...')
   } catch (err) {
     console.error(err.message)

@@ -45,7 +45,7 @@ const port = process.env.PORT || 8080
 
 const start = async (): Promise<void> => {
   try {
-    await connectDB(process.env.MONGO_URI)
+    await connectDB()
     app.listen(port, () => console.log(`Server is started on ${process.env.SERVER_URL || `http://localhost:${port}`}`))
   } catch (error) {
     console.log(error)

@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
 import { Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import Request from '../types/Request'
-import { Tenant } from '../models/Tenant'
-import { createCompanySchema } from '../models/Company'
-import CompanySchema from '../schemas/Company'
+import Request from '../../types/Request'
+import { Tenant } from '../../models/private/Tenant'
+import { createCompanySchema } from '../../models/private/Company'
+import CompanySchema from '../../schemas/Company'
 
 export const createCompany = async (req: Request, res: Response): Promise<void> => {
   try {

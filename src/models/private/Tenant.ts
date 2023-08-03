@@ -32,12 +32,8 @@ const TenantSchema = new mongoose.Schema({
   },
   companies: [
     {
-      prefix: {
-        type: String,
-        required: [true, 'please provide a company'],
-        unique: true,
-        sparse: true,
-      },
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'Company',
     },
   ],
 })

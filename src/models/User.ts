@@ -1,8 +1,9 @@
 import { Document, Schema, model } from 'mongoose'
+import jwt from 'jsonwebtoken'
 
 export interface IUser extends Document {
   email: string
-  token: string
+  createJwt(): string
 }
 
 const UserSchema = new Schema<IUser>({
@@ -12,11 +13,13 @@ const UserSchema = new Schema<IUser>({
     unique: true,
     match: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
   },
-  token: {
-    type: String,
-    required: [true, 'please provide your token'],
-  },
 })
+
+UserSchema.methods.createJwt = function (): string {
+  return jwt.sign({ userID: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_LIFETIME,
+  })
+}
 
 const UserModel = model<IUser>('User', UserSchema)
 export default UserModel

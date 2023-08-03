@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getTenantById, updateTenant, checkLogin } from '../controllers/tenant'
+import { getTenantById, updateTenant, checkLogin } from '../controllers/private/tenant'
 
 const tenantRouter = Router()
 

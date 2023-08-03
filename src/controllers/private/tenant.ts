@@ -1,8 +1,8 @@
 import { Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import Request from '../types/Request'
-import { Tenant } from '../models/Tenant'
-import TenantSchema from '../schemas/Tenant'
+import Request from '../../types/Request'
+import { Tenant } from '../../models/private/Tenant'
+import TenantSchema from '../../schemas/Tenant'
 
 export const getTenantById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params
