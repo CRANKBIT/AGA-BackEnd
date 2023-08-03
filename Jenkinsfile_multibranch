@@ -7,14 +7,14 @@ pipeline {
         IMAGE_REPO_NAME = credentials('IMAGE_REPO_NAME')
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         COMMIT_HASH = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-        ECS_CLUSTER = "crankbit-${ENV.BRANCH_NAME}-cluster"
-        ECS_SERVICE = "crankbit-${ENV.BRANCH_NAME}-ecs-service"
-        ECS_FAMILY = "crankbit-${ENV.BRANCH_NAME}-td"
+        CURRENT_BRANCH = env.BRANCH_NAME
+        ECS_CLUSTER = "crankbit-${CURRENT_BRANCH}-cluster"
+        ECS_SERVICE = "crankbit-${CURRENT_BRANCH}-ecs-service"
+        ECS_FAMILY = "crankbit-${CURRENT_BRANCH}-td"
 
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 // Checkout your source code from the main repository(project repo)
