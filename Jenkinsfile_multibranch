@@ -7,10 +7,15 @@ pipeline {
         IMAGE_REPO_NAME = credentials('IMAGE_REPO_NAME')
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         COMMIT_HASH = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-        ECS_CLUSTER = "crankbit-dev-cluster"
-        ECS_SERVICE = "crankbit-dev-ecs-service"
-        ECS_FAMILY = "crankbit-dev-td"
+        ECS_CLUSTER = "crankbit-${ENV.BRANCH_NAME}-cluster"
+        ECS_SERVICE = "crankbit-${ENV.BRANCH_NAME}-ecs-service"
+        ECS_FAMILY = "crankbit-${ENV.BRANCH_NAME}-td"
 
+    }
+
+     // Execute all stages only when branch is 'uat' or 'prod'
+    when {
+        expression { branchName == 'uat' || branchName == 'prod' }
     }
 
     stages {
