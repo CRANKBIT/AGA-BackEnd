@@ -5,7 +5,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 import Payload from '../types/Payload'
 import Request from '../types/Request'
 
-const authenticateTenant = (req: Request, res: Response, next: NextFunction): void => {
+const auth = (req: Request, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -24,6 +24,7 @@ const authenticateTenant = (req: Request, res: Response, next: NextFunction): vo
     const payload: Payload | JwtPayload = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload
 
     req.tenantId = payload.tenantId
+    req.userId = payload.userId
 
     next()
   } catch (err) {
@@ -31,4 +32,4 @@ const authenticateTenant = (req: Request, res: Response, next: NextFunction): vo
   }
 }
 
-export default authenticateTenant
+export default auth

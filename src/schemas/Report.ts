@@ -1,9 +1,9 @@
 import Joi from 'joi'
 
 const ReportSchema = Joi.object({
-  vehicle: Joi.string().required(),
+  vehicle: Joi.required(),
   owner: Joi.string().min(3).max(50),
-  service: Joi.string().required(),
+  service: Joi.array().items(Joi.string()).label('Service'),
   createdAt: Joi.string().isoDate().required(),
   description: Joi.string().required().label('Description'),
   status: Joi.string().valid('Pending', 'In Progress', 'Resolved').required().label('Status'),
