@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose'
+import { Document, Schema } from 'mongoose'
 import jwt from 'jsonwebtoken'
 
 export interface IUser extends Document {

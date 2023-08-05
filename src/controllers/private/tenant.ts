@@ -33,10 +33,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 }
 
 export const login = async (req: Request, res: Response): Promise<void> => {
-  if (req.headers.host.split('.')[0] !== 'www') {
-    res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid host' })
-    return
-  }
   const { error, value } = TenantSchema.validate(req.body)
 
   if (error) {
