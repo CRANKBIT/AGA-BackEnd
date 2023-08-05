@@ -6,7 +6,7 @@ export interface IUser extends Document {
   createJwt(): string
 }
 
-const UserSchema = new Schema<IUser>({
+export const UserSchema = new Schema<IUser>({
   email: {
     type: String,
     required: [true, 'please enter your email'],
@@ -20,6 +20,3 @@ UserSchema.methods.createJwt = function (): string {
     expiresIn: process.env.JWT_LIFETIME,
   })
 }
-
-const UserModel = model<IUser>('User', UserSchema)
-export default UserModel

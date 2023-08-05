@@ -1,18 +1,21 @@
 import { Router } from 'express'
-import tenantRouter from './tenant'
-import authRouter from './auth'
 import companyRouter from './company'
+import tenantRouter from './tenant'
+import reportRouter from './report'
 import userRouter from './user'
+import vehicleRouter from './vehicle'
+
 import authenticateTenant from '../middleware/auth'
-import serviceItemRouter from './serviceitems'
+import privateMW from '../middleware/private'
+import publicMW from '../middleware/public'
 
 const v1Router = Router()
 
 v1Router
-  .use('/auth', authRouter)
-  .use('/tenant', authenticateTenant, tenantRouter)
-  .use('/companies', authenticateTenant, companyRouter)
-  .use('/user', authenticateTenant, userRouter)
-  .use('/serviceItem', serviceItemRouter)
+  .use('/company', privateMW, authenticateTenant, companyRouter)
+  .use('/tenant', privateMW, authenticateTenant, tenantRouter)
+  .use('/report', publicMW, authenticateTenant, reportRouter)
+  .use('/user', publicMW, authenticateTenant, userRouter)
+  .use('/vehicle', publicMW, authenticateTenant, vehicleRouter)
 
 export default v1Router

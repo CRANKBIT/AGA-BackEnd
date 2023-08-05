@@ -1,83 +1,87 @@
-import mongoose from 'mongoose'
 import { Response } from 'express'
-import { StatusCodes } from 'http-status-codes'
+import Joi from 'joi'
 import Request from '../../types/Request'
-import { Tenant } from '../../models/private/Tenant'
-import { createCompanySchema } from '../../models/private/Company'
+import { ICompany } from '../../models/private/Company'
 import CompanySchema from '../../schemas/Company'
 
 export const createCompany = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tenant = await Tenant.findById(req.tenantId)
-
-    if (!tenant) {
-      res.status(StatusCodes.NOT_FOUND).json({ msg: 'User not found, unable to create company' })
-      return
-    }
-
-    const { error, value } = CompanySchema.validate(req.body)
+    const companyData = req.body as Partial<ICompany>
+    const { error } = CompanySchema.validate(companyData)
     if (error) {
-      res.status(StatusCodes.BAD_REQUEST).json({ msg: error.message })
-      return
+      throw new Error(error.details[0].message)
     }
-
-    const { domain } = value
-
-    const tenantsConnection = mongoose.createConnection(`${process.env.MONGO_BASE_URI}/tenants`)
-    const CompanyModel = createCompanySchema(tenantsConnection)
-
-    const companyExsits = await CompanyModel.findOne({ domain })
-    if (companyExsits) {
-      res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Company name already in use' })
-      return
-    }
-
-    const company = await CompanyModel.create({ domain })
-
-    tenant.companies.push(company)
-    await tenant.save()
-
-    const companyConnection = mongoose.createConnection(`${process.env.MONGO_BASE_URI}/${domain.split('.')[0]}`)
-    const CompanyDBModel = createCompanySchema(companyConnection)
-
-    await CompanyDBModel.create({
-      _id: company._id,
-      domain,
-    })
-
-    res.status(StatusCodes.CREATED).json({
-      tenant: {
-        tenantId: tenant._id,
-        name: tenant.name,
-        email: tenant.email,
-        companies: tenant.companies,
-      },
-    })
+    const newCompany = await req.model.Company.create(companyData)
+    res.json(newCompany)
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: error.message })
+    res.status(500).json({ error: 'Internal Server Error' })
   }
 }
 
-// NOTE: This controller is for auth user to check their own companies created, not for ADMIN to check all companies in database, might add in the future
+export const getCompanys = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const company = req.model.Company.find().lean()
+    if (!company) {
+      res.status(404).json({ error: 'Company not found' })
+    } else {
+      res.json(company)
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+}
+
 export const getCompanyById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tenant = await Tenant.findById(req.tenantId)
-
-    if (!tenant) {
-      res.status(StatusCodes.NOT_FOUND).json({ msg: 'User not found, unable to check company' })
-      return
+    const companyId = req.params.id
+    const { error } = Joi.string().required().validate(companyId)
+    if (error) {
+      throw new Error(error.details[0].message)
     }
-
-    const { id } = req.params
-    const company = tenant.companies.find((comp) => comp._id.toString() === id)
-
+    const company = req.model.Company.findById(companyId).lean()
     if (!company) {
-      res.status(StatusCodes.NOT_FOUND).json({ msg: 'Company not found' })
-      return
+      res.status(404).json({ error: 'Company not found' })
+    } else {
+      res.json(company)
     }
-
-    res.status(StatusCodes.OK).json(company)
   } catch (error) {
-    res.status(StatusCodes.NOT_FOUND).json(error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+}
+
+export const updateCompanyById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const companyId = req.params.id
+    const updatedData = req.body as Partial<ICompany>
+    const { error } = Joi.string().required().validate(companyId)
+    if (error) {
+      throw new Error(error.details[0].message)
+    }
+    const updatedCompany = req.model.Company.findByIdAndUpdate(companyId, updatedData, { new: true }).lean()
+    if (!updatedCompany) {
+      res.status(404).json({ error: 'Company not found' })
+    } else {
+      res.json(updatedCompany)
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+}
+
+export const deleteCompanyById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const companyId = req.params.id
+    const { error } = Joi.string().required().validate(companyId)
+    if (error) {
+      throw new Error(error.details[0].message)
+    }
+    const deletedCompany = await req.model.Company.findByIdAndDelete(companyId).lean()
+    if (!deletedCompany) {
+      res.status(404).json({ error: 'Company not found' })
+    } else {
+      res.json(deletedCompany)
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' })
   }
 }

@@ -12,7 +12,7 @@ export interface ITenant extends Document {
   comparePassword(inputPassword: string): Promise<boolean>
 }
 
-const TenantSchema = new mongoose.Schema({
+export const TenantSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [false, 'please enter your name'],
@@ -58,5 +58,3 @@ TenantSchema.methods.comparePassword = async function (inputPassword: string): P
   const isMatch = await bcrypt.compare(inputPassword, this.password)
   return isMatch
 }
-
-export const Tenant = mongoose.model<ITenant>('Tenant', TenantSchema)
