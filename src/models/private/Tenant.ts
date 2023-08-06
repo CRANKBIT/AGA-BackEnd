@@ -7,7 +7,7 @@ export interface ITenant extends Document {
   name: string
   email: string
   password: string
-  companies: ICompany[]
+  company: ICompany[]
   createJwt(): string
   comparePassword(inputPassword: string): Promise<boolean>
 }
@@ -30,7 +30,7 @@ export const TenantSchema = new mongoose.Schema({
     minlength: 6,
     select: false,
   },
-  companies: [
+  company: [
     {
       type: [mongoose.Schema.Types.ObjectId],
       ref: 'Company',

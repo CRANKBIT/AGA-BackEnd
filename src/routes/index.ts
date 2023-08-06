@@ -15,7 +15,7 @@ const v1Router = Router()
 v1Router
   .use('/company', privateMW, authenticateTenant, companyRouter)
   .use('/tenant', privateMW, tenantRouter)
-  .use('/report', publicMW, authenticateTenant, reportRouter)
+  .use('/report', publicMW, reportRouter)
   .use('/user', publicMW, authenticateTenant, userRouter)
   .use('/vehicle', publicMW, authenticateTenant, vehicleRouter)
   .use('/s3', s3Router)

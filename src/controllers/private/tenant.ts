@@ -62,6 +62,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       tenantId: tenant._id,
       name: tenant.name,
       email: tenant.email,
+      company: tenant.company,
     },
     token,
   })

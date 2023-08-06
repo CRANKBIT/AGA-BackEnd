@@ -1,9 +1,15 @@
-import { Router } from 'express'
-import { createCompany, getCompanyById } from '../controllers/private/company'
+import express from 'express'
+import { createCompany, getMyCompanys, deleteCompanyById } from '../controllers/private/company'
 
-const companyRouter = Router()
+const companyRouter = express.Router()
 
-companyRouter.route('/').post(createCompany)
-companyRouter.route('/:id').get(getCompanyById)
+// Create a new company
+companyRouter.post('/', createCompany)
+
+// Get all companies
+companyRouter.get('/', getMyCompanys)
+
+// Delete a company by ID
+companyRouter.delete('/:id', deleteCompanyById)
 
 export default companyRouter
