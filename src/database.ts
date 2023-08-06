@@ -1,18 +1,17 @@
-import mongoose, { connect } from 'mongoose'
+import mongoose from 'mongoose'
 
-mongoose.set('strictQuery', false)
+mongoose.Promise = global.Promise
 
-const connectDB = async (MONGO_URI: string): Promise<void> => {
+const connectDB = async (subdomain: string): Promise<mongoose.Connection> => {
   try {
-    if (!MONGO_URI) {
+    if (!process.env.MONGO_URI) {
       throw new Error('Please make sure that MONGO_URI is defined in .env file')
     }
-    await connect(MONGO_URI)
-    console.log('MongoDB Connected...')
+    // setup www
+    return mongoose.createConnection(`${process.env.MONGO_URI}${subdomain}`)
   } catch (err) {
     console.error(err.message)
-    // Exit process with failure
-    process.exit(1)
+    return err
   }
 }
 

@@ -1,10 +1,11 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import { Document, Schema, Types } from 'mongoose'
+import { IVehicle } from './Vehicle'
 
 export interface IReport extends Document {
   title: string
-  vehicle: string
+  vehicle: Types.ObjectId | IVehicle
   owner: string
-  service: string
+  service: [string]
   createdAt: string
   description: string
   status: 'Pending' | 'In Progress' | 'Resolved'
@@ -13,13 +14,14 @@ export interface IReport extends Document {
   comments: string[]
 }
 
-const ReportSchema = new Schema<IReport>({
+export const ReportSchema = new Schema<IReport>({
   title: {
     type: String,
     required: [true, 'Please enter your report title.'],
   },
   vehicle: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'Vehicle',
     required: [true, 'Please enter the vehicle.'],
   },
   owner: {
@@ -28,7 +30,7 @@ const ReportSchema = new Schema<IReport>({
     maxlength: 50,
   },
   service: {
-    type: String,
+    type: [String],
     required: [true, 'Please enter the service.'],
   },
   createdAt: {
@@ -57,5 +59,3 @@ const ReportSchema = new Schema<IReport>({
     default: [],
   },
 })
-
-export const Report = mongoose.model<IReport>('Report', ReportSchema)
