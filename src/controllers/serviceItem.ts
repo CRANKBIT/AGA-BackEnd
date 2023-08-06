@@ -1,14 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import ServiceItemModel, { Items } from '../models/ServiceItem'
-import { handleServerError} from '../middleware/errorHandler'
-
-
+import { handleServerError } from '../middleware/errorHandler'
 
 // Create a new Service
 export const createService = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
-  const {serviceItems} = req.body
+  const { serviceItems } = req.body
   try {
-    const newService: Items = new ServiceItemModel({serviceItems})
+    const newService: Items = new ServiceItemModel({ serviceItems })
     await newService.save()
     res.status(201).json(newService)
   } catch (error) {

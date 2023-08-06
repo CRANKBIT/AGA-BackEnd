@@ -11,5 +11,4 @@ serviceItemRouter.post('/', createService)
 // Get all services
 serviceItemRouter.get('/', getService)
 
-
 export default serviceItemRouter
