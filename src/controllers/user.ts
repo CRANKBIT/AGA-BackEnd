@@ -6,6 +6,10 @@ import UserSchema from '../schemas/User'
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
+    // const { tenantId } = req
+    // if(tenantId == null) {
+    //   res.status(500).json({ error: 'Internal Server Error' })
+    // }
     const userData = req.body as Partial<IUser>
     const { error } = UserSchema.validate(userData)
     if (error) {
@@ -43,25 +47,6 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
       res.status(404).json({ error: 'User not found' })
     } else {
       res.json(user)
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' })
-  }
-}
-
-export const updateUserById = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const userId = req.params.id
-    const updatedData = req.body as Partial<IUser>
-    const { error } = Joi.string().required().validate(userId)
-    if (error) {
-      throw new Error(error.details[0].message)
-    }
-    const updatedUser = req.model.User.findByIdAndUpdate(userId, updatedData, { new: true }).lean()
-    if (!updatedUser) {
-      res.status(404).json({ error: 'User not found' })
-    } else {
-      res.json(updatedUser)
     }
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' })

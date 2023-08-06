@@ -41,6 +41,8 @@ export const getMyCompanys = async (req: Request, res: Response): Promise<void> 
 export const deleteCompanyById = async (req: Request, res: Response): Promise<void> => {
   try {
     const companyId = req.params.id
+    // 删除company => 同时删除数据库
+    // auth check
     const { error } = Joi.string().required().validate(companyId)
     if (error) {
       throw new Error(error.details[0].message)
