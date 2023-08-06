@@ -6,63 +6,33 @@ import CompanySchema from '../../schemas/Company'
 
 export const createCompany = async (req: Request, res: Response): Promise<void> => {
   try {
-    const companyData = req.body as Partial<ICompany>
+    const { tenantId } = req
+    const companyData = req.body as ICompany
     const { error } = CompanySchema.validate(companyData)
     if (error) {
       throw new Error(error.details[0].message)
     }
     const newCompany = await req.model.Company.create(companyData)
+    const tenant = await req.model.Tenant.findById(tenantId)
+    tenant.company.push(newCompany._id)
+    await tenant.save()
     res.json(newCompany)
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' })
   }
 }
 
-export const getCompanys = async (req: Request, res: Response): Promise<void> => {
+export const getMyCompanys = async (req: Request, res: Response): Promise<void> => {
   try {
-    const company = req.model.Company.find().lean()
-    if (!company) {
-      res.status(404).json({ error: 'Company not found' })
-    } else {
-      res.json(company)
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' })
-  }
-}
-
-export const getCompanyById = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const companyId = req.params.id
-    const { error } = Joi.string().required().validate(companyId)
-    if (error) {
-      throw new Error(error.details[0].message)
-    }
-    const company = req.model.Company.findById(companyId).lean()
-    if (!company) {
-      res.status(404).json({ error: 'Company not found' })
-    } else {
-      res.json(company)
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' })
-  }
-}
-
-export const updateCompanyById = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const companyId = req.params.id
-    const updatedData = req.body as Partial<ICompany>
-    const { error } = Joi.string().required().validate(companyId)
-    if (error) {
-      throw new Error(error.details[0].message)
-    }
-    const updatedCompany = req.model.Company.findByIdAndUpdate(companyId, updatedData, { new: true }).lean()
-    if (!updatedCompany) {
-      res.status(404).json({ error: 'Company not found' })
-    } else {
-      res.json(updatedCompany)
-    }
+    const { tenantId } = req
+    const tenant = await req.model.Tenant.findById(tenantId).populate('company')
+    const companies = await Promise.all(
+      tenant.company.map(async (companyId) => {
+        const company = await req.model.Company.findById(companyId)
+        return company
+      })
+    )
+    res.json(companies)
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' })
   }
