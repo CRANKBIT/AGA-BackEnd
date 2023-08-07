@@ -9,6 +9,7 @@ import authenticateTenant from '../middleware/auth'
 import privateMW from '../middleware/private'
 import publicMW from '../middleware/public'
 import s3Router from './s3'
+import checkSubDomainRouter from './checkDomain'
 
 const v1Router = Router()
 
@@ -19,5 +20,6 @@ v1Router
   .use('/user', publicMW, authenticateTenant, userRouter)
   .use('/vehicle', publicMW, authenticateTenant, vehicleRouter)
   .use('/s3', s3Router)
+  .use('/checkSubDomain', checkSubDomainRouter)
 
 export default v1Router
