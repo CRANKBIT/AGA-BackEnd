@@ -1,48 +1,42 @@
 import { Response } from 'express'
 import Joi from 'joi'
 import Request from '../types/Request'
-import { IUser } from '../models/User'
-import UserSchema from '../schemas/User'
+import sendEmail from '../utils/email'
 
-export const createUser = async (req: Request, res: Response): Promise<void> => {
+export const sendInviteEmial = async (req: Request, res: Response): Promise<void> => {
   try {
-    // const { tenantId } = req
-    // if(tenantId == null) {
-    //   res.status(500).json({ error: 'Internal Server Error' })
-    // }
-    const userData = req.body as Partial<IUser>
-    const { error } = UserSchema.validate(userData)
-    if (error) {
-      throw new Error(error.details[0].message)
+    const { tenantId } = req
+    if (tenantId == null) {
+      res.status(500).json({ error: 'Auth error' })
     }
-    const newUser = await req.model.User.create(userData)
-    res.json(newUser)
+    let { email } = req.params
+    email = decodeURIComponent(email)
+    const newUser = await req.model.User.create({ email })
+    const JWT = newUser.createJwt()
+    try {
+      const { referer } = req.headers
+      const url = new URL(referer)
+      url.pathname = ''
+      url.search = ''
+      url.hash = `/publicLogin/${encodeURIComponent(`/user/my-reports`)}/${encodeURIComponent(
+        JSON.stringify({
+          user: newUser,
+          token: JWT,
+        })
+      )}`
+      await sendEmail(email, 'Invitation', `${url}`)
+    } catch (error) {
+      /* empty */
+    }
+    res.json({ ok: true })
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' })
+    res.status(500).json(error.message)
   }
 }
 
-export const getUsers = async (req: Request, res: Response): Promise<void> => {
+export const getMyUsers = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = req.model.User.find().lean()
-    if (!user) {
-      res.status(404).json({ error: 'User not found' })
-    } else {
-      res.json(user)
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' })
-  }
-}
-
-export const getUserById = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const userId = req.params.id
-    const { error } = Joi.string().required().validate(userId)
-    if (error) {
-      throw new Error(error.details[0].message)
-    }
-    const user = req.model.User.findById(userId).lean()
+    const user = await req.model.User.find().lean()
     if (!user) {
       res.status(404).json({ error: 'User not found' })
     } else {
