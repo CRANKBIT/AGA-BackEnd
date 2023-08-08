@@ -11,8 +11,9 @@ const checkSubDomain = async (req: Request, res: Response): Promise<void> => {
     console.log(domain)
     const connection = await connectDB(subdomain)
     req.model = privateModel(connection)
-    // check if this subdomian is exist in company list
-    const result = await req.model.Company.findOne({ domain})
+    // check if this subdomian is in company list
+
+    const result = await req.model.Company.findOne({ domain })
     if (result) {
       res.json(true)
     } else {
