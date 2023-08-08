@@ -12,6 +12,9 @@ export const createCompany = async (req: Request, res: Response): Promise<void> 
     if (error) {
       throw new Error(error.details[0].message)
     }
+    if (['admin', 'test', 'local'].includes(companyData.domain)) {
+      res.status(500).json({ error: `Not allowed domain: ${companyData.domain}` })
+    }
     const newCompany = await req.model.Company.create(companyData)
     const tenant = await req.model.Tenant.findById(tenantId)
     tenant.company.push(newCompany._id)
