@@ -18,7 +18,7 @@ export const createCompany = async (req: Request, res: Response): Promise<void> 
     await tenant.save()
     res.json(newCompany)
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' })
+    res.status(500).json(error.message)
   }
 }
 
