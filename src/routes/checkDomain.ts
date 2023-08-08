@@ -4,7 +4,7 @@ import checkSubDomain from '../controllers/public'
 const checkSubDomainRouter = express.Router()
 
 // Create a new user
-checkSubDomainRouter.post('/', checkSubDomain)
+checkSubDomainRouter.get('/:domain', checkSubDomain)
 
 
 export default checkSubDomainRouter
