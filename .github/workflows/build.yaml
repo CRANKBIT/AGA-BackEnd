@@ -118,12 +118,11 @@ jobs:
           JWT_LIFETIME: ${{ secrets.JWT_LIFETIME }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           PORT: ${{ secrets.PORT }}
-          EMAIL_SERVER_PASSWORD: ${{ secrets.EMAIL_SERVER_PASSWORD }}
-          EMAIL_SERVER_PORT: ${{ secrets.EMAIL_SERVER_PORT }}
-          EMAIL_SERVER_HOST: ${{ secrets.EMAIL_SERVER_HOST }}
-          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-          EMAIL_SERVER_USER: ${{ secrets.EMAIL_SERVER_USER }}
-          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          MAIN_HOST: ${{ secrets.MAIN_HOST }}
+          AWS_BUCKET_REGION: ${{ secrets.MAIN_HOST }}
+          AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+          MAIL_USER: ${{ secrets.MAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
         run: |
           docker build \
           --build-arg MONGO_URI="$MONGO_URI" \
@@ -131,12 +130,11 @@ jobs:
           --build-arg JWT_LIFETIME="$JWT_LIFETIME" \
           --build-arg JWT_SECRET_KEY="$JWT_SECRET_KEY" \
           --build-arg PORT="$PORT" \
-          --build-arg EMAIL_SERVER_PASSWORD="$EMAIL_SERVER_PASSWORD" \
-          --build-arg EMAIL_SERVER_PORT="$EMAIL_SERVER_PORT" \
-          --build-arg EMAIL_SERVER_HOST="$EMAIL_SERVER_HOST" \
-          --build-arg EMAIL_FROM="$EMAIL_FROM" \
-          --build-arg EMAIL_SERVER_USER="$EMAIL_SERVER_USER" \
-          --build-arg SENDGRID_API_KEY="$SENDGRID_API_KEY" \
+          --build-arg MAIN_HOST="$MAIN_HOST" \
+          --build-arg AWS_BUCKET_REGION="$AWS_BUCKET_REGION" \
+          --build-arg AWS_BUCKET_NAME="$AWS_BUCKET_NAME" \
+          --build-arg MAIL_USER="$MAIL_USER" \
+          --build-arg EMAIL_PASS="$EMAIL_PASS" \
           -t ${{ vars.ECS_REGISTRY_ZIQI }}/crankbit-backend-${{ github.ref_name }}:latest \
           -t ${{ vars.ECS_REGISTRY_ZIQI }}/crankbit-backend-${{ github.ref_name }}:${{ github.sha }} .
 
