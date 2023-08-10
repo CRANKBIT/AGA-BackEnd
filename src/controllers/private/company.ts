@@ -1,5 +1,6 @@
 import { Response } from 'express'
 import Joi from 'joi'
+import { dropDB } from '../../database'
 import Request from '../../types/Request'
 import { ICompany } from '../../models/private/Company'
 import CompanySchema from '../../schemas/Company'
@@ -25,7 +26,7 @@ export const createCompany = async (req: Request, res: Response): Promise<void> 
   }
 }
 
-export const getMyCompanys = async (req: Request, res: Response): Promise<void> => {
+export const getMyCompanies = async (req: Request, res: Response): Promise<void> => {
   try {
     const { tenantId } = req
     const tenant = await req.model.Tenant.findById(tenantId).populate('company')
@@ -41,22 +42,66 @@ export const getMyCompanys = async (req: Request, res: Response): Promise<void> 
   }
 }
 
-export const deleteCompanyById = async (req: Request, res: Response): Promise<void> => {
+export const deleteCompanyByDomain = async (req: Request, res: Response): Promise<void> => {
   try {
-    const companyId = req.params.id
-    // 删除company => 同时删除数据库
-    // auth check
-    const { error } = Joi.string().required().validate(companyId)
+    const companyDomain = req.params.domain
+    const { tenantId } = req
+    const { error } = Joi.string().required().validate(companyDomain)
     if (error) {
       throw new Error(error.details[0].message)
     }
-    const deletedCompany = await req.model.Company.findByIdAndDelete(companyId).lean()
+    const deletedCompany = await req.model.Company.findOneAndDelete({ domain: `${companyDomain}` }).lean()
     if (!deletedCompany) {
       res.status(404).json({ error: 'Company not found' })
     } else {
       res.json(deletedCompany)
     }
+    const tenant = await req.model.Tenant.findById(tenantId)
+    tenant.company = tenant.company.filter((item) => !item.includes(deletedCompany._id))
+    await tenant.save()
+    // await dropDB(companyDomain)
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' })
   }
 }
+
+// export const deleteCompanyById = async (req: Request, res: Response): Promise<void> => {
+//   try {
+//     const companyId = req.params.id
+//     const { tenantId } = req
+//     const { error } = Joi.string().required().validate(companyId)
+//     if (error) {
+//       throw new Error(error.details[0].message)
+//     }
+//     const deletedCompany = await req.model.Company.findByIdAndDelete(companyId).lean()
+//     const tenant = await req.model.Tenant.findById(tenantId)
+//     tenant.company = tenant.company.filter((item) => !item.includes(companyId))
+//     await tenant.save()
+//     await dropDB(companyId)
+//     if (!deletedCompany) {
+//       res.status(404).json({ error: 'Company not found' })
+//     } else {
+//       res.json(deletedCompany)
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: 'Internal Server Error' })
+//   }
+// }
+
+// export const getCompanyIdByDomain = async (req: Request, res: Response): Promise<void> => {
+//   try {
+//     const companyDomain = req.params.domain
+//     const { error } = Joi.string().required().validate(companyDomain)
+//     if (error) {
+//       throw new Error(error.details[0].message)
+//     }
+//     const companyId = await (await req.model.Company.findOne({domain: `${companyDomain}`}).lean())._id
+//     if (!companyId) {
+//       res.status(404).json({ error: 'Company not found' })
+//     } else {
+//       res.json(companyId)
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: 'Internal Server Error' })
+//   }
+// }
