@@ -16,3 +16,18 @@ const connectDB = async (subdomain: string): Promise<mongoose.Connection> => {
 }
 
 export default connectDB
+
+export const dropDB = async (subdomain: string): Promise<mongoose.Connection> => {
+  try {
+    await mongoose.disconnect()
+    mongoose.createConnection(`${process.env.MONGO_URI}${subdomain}`)
+
+    // currently blocked at below line
+    await mongoose.connection.dropDatabase()
+    await mongoose.disconnect()
+    return mongoose.createConnection(`${process.env.MONGO_URI}www`)
+  } catch (err) {
+    console.error(err.message)
+    return err
+  }
+}

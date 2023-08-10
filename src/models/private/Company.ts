@@ -2,6 +2,7 @@ import mongoose, { Document } from 'mongoose'
 
 export interface ICompany extends Document {
   domain: string
+  includes: (arg0: string) => string
 }
 
 export const CompanySchema = new mongoose.Schema({
