@@ -1,15 +1,19 @@
 import { Document, Schema, Types } from 'mongoose'
-import { IVehicle } from './Vehicle'
 
+
+export interface IVehicle {
+  make: string
+  model: string
+  rego: string
+  year: number
+  odo: number
+}
 export interface IReport extends Document {
   title: string
-  vehicle: Types.ObjectId | IVehicle
+  vehicle: IVehicle
   owner: string
-  service: [string]
+  service: string[]
   createdAt: string
-  description: string
-  status: 'Pending' | 'In Progress' | 'Resolved'
-  assignedTo: string
   attachments: string[]
   comments: string[]
 }
@@ -17,12 +21,29 @@ export interface IReport extends Document {
 export const ReportSchema = new Schema<IReport>({
   title: {
     type: String,
-    required: [true, 'Please enter your report title.'],
   },
   vehicle: {
-    type: Schema.Types.ObjectId,
-    ref: 'Vehicle',
-    required: [true, 'Please enter the vehicle.'],
+    make: {
+      type: String,
+      required: [true, 'Please enter the make of the vehicle.'],
+    },
+    model: {
+      type: String,
+      required: [true, 'Please enter the model of the vehicle.'],
+    },
+    rego: {
+      type: String,
+      required: [true, 'Please enter the rego of the vehicle.'],
+    },
+    year: {
+      type: Number,
+      required: [true, 'Please enter the year of the vehicle.'],
+    },
+
+   odo: {
+      type: Number,
+      required: [true, 'Please enter the odometer of the vehicle.'],
+    },
   },
   owner: {
     type: String,
@@ -35,20 +56,6 @@ export const ReportSchema = new Schema<IReport>({
   },
   createdAt: {
     type: String,
-    required: [true, 'Please enter the creation date.'],
-  },
-  description: {
-    type: String,
-    required: [true, 'Please enter the description.'],
-  },
-  status: {
-    type: String,
-    enum: ['Pending', 'In Progress', 'Resolved'],
-    required: [true, 'Please enter the status.'],
-  },
-  assignedTo: {
-    type: String,
-    required: [true, 'Please enter the assigned person.'],
   },
   attachments: {
     type: [String],
