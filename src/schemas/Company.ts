@@ -5,8 +5,8 @@ const domainErrorMessage = 'Please provide a valid domain name.'
 const CompanySchema = Joi.object({
   domain: Joi.string()
     .required()
-    .min(3)
-    .max(30)
+    .max(10)
+    .regex(/^[a-zA-Z0-9-]+$/)
     .error(() => domainErrorMessage),
 })
 
