@@ -1,61 +1,44 @@
 import { Document, Schema, Types } from 'mongoose'
-import { IVehicle } from './Vehicle'
+
 
 export interface IReport extends Document {
-  title: string
-  vehicle: Types.ObjectId | IVehicle
-  owner: string
-  service: [string]
-  createdAt: string
-  description: string
-  status: 'Pending' | 'In Progress' | 'Resolved'
-  assignedTo: string
-  attachments: string[]
-  comments: string[]
+  Year: string
+  Make: string
+  Model: string
+  Rego: string
+  Odometer: string
+  CustomerName: string
+  service: string[]
 }
 
 export const ReportSchema = new Schema<IReport>({
-  title: {
-    type: String,
-    required: [true, 'Please enter your report title.'],
-  },
-  vehicle: {
-    type: Schema.Types.ObjectId,
-    ref: 'Vehicle',
-    required: [true, 'Please enter the vehicle.'],
-  },
-  owner: {
-    type: String,
-    minlength: 3,
-    maxlength: 50,
-  },
+    Year: {
+      type: String,
+      required: [true, 'Please enter the make of the vehicle.'],
+    },
+    Make: {
+      type: String,
+      required: [true, 'Please enter the model of the vehicle.'],
+    },
+    Model: {
+      type: String,
+      required: [true, 'Please enter the rego of the vehicle.'],
+    },
+    Rego: {
+      type: String,
+      required: [true, 'Please enter the year of the vehicle.'],
+    },
+
+    Odometer: {
+      type: String,
+      required: [true, 'Please enter the odometer of the vehicle.'],
+    },
+    CustomerName: {
+      type: String,
+      required: [true, 'Please enter the owner name of the vehicle.'],
+    },
   service: {
     type: [String],
     required: [true, 'Please enter the service.'],
-  },
-  createdAt: {
-    type: String,
-    required: [true, 'Please enter the creation date.'],
-  },
-  description: {
-    type: String,
-    required: [true, 'Please enter the description.'],
-  },
-  status: {
-    type: String,
-    enum: ['Pending', 'In Progress', 'Resolved'],
-    required: [true, 'Please enter the status.'],
-  },
-  assignedTo: {
-    type: String,
-    required: [true, 'Please enter the assigned person.'],
-  },
-  attachments: {
-    type: [String],
-    default: [],
-  },
-  comments: {
-    type: [String],
-    default: [],
   },
 })
