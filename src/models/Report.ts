@@ -1,68 +1,44 @@
 import { Document, Schema, Types } from 'mongoose'
 
 
-export interface IVehicle {
-  make: string
-  model: string
-  rego: string
-  year: number
-  odo: number
-}
 export interface IReport extends Document {
-  title: string
-  vehicle: IVehicle
-  owner: string
+  Year: string
+  Make: string
+  Model: string
+  Rego: string
+  Odometer: string
+  CustomerName: string
   service: string[]
-  createdAt: string
-  attachments: string[]
-  comments: string[]
 }
 
 export const ReportSchema = new Schema<IReport>({
-  title: {
-    type: String,
-  },
-  vehicle: {
-    make: {
+    Year: {
       type: String,
       required: [true, 'Please enter the make of the vehicle.'],
     },
-    model: {
+    Make: {
       type: String,
       required: [true, 'Please enter the model of the vehicle.'],
     },
-    rego: {
+    Model: {
       type: String,
       required: [true, 'Please enter the rego of the vehicle.'],
     },
-    year: {
-      type: Number,
+    Rego: {
+      type: String,
       required: [true, 'Please enter the year of the vehicle.'],
     },
 
-   odo: {
-      type: Number,
+    Odometer: {
+      type: String,
       required: [true, 'Please enter the odometer of the vehicle.'],
     },
-  },
-  owner: {
-    type: String,
-    minlength: 3,
-    maxlength: 50,
-  },
+    CustomerName: {
+      type: String,
+      required: [true, 'Please enter the owner name of the vehicle.'],
+    },
   service: {
     type: [String],
     required: [true, 'Please enter the service.'],
-  },
-  createdAt: {
-    type: String,
-  },
-  attachments: {
-    type: [String],
-    default: [],
-  },
-  comments: {
-    type: [String],
-    default: [],
   },
 })
