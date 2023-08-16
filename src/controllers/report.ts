@@ -20,7 +20,7 @@ export const createReport = async (req: Request, res: Response): Promise<void> =
 
 export const getReports = async (req: Request, res: Response): Promise<void> => {
   try {
-    const report = req.model.Report.find().lean()
+    const report = await req.model.Report.find().lean()
     if (!report) {
       res.status(404).json({ error: 'Report not found' })
     } else {
