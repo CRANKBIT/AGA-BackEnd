@@ -1,5 +1,5 @@
 import express from 'express'
-import { createCompany, getMyCompanys, deleteCompanyById } from '../controllers/private/company'
+import { createCompany, getMyCompanies, deleteCompanyByDomain } from '../controllers/private/company'
 
 const companyRouter = express.Router()
 
@@ -7,9 +7,14 @@ const companyRouter = express.Router()
 companyRouter.post('/', createCompany)
 
 // Get all companies
-companyRouter.get('/', getMyCompanys)
+companyRouter.get('/', getMyCompanies)
 
-// Delete a company by ID
-companyRouter.delete('/:id', deleteCompanyById)
+// Delete a company by Domain
+
+companyRouter.delete('/:domain', deleteCompanyByDomain)
+
+// companyRouter.delete('/:id', deleteCompanyById)
+
+// companyRouter.get('/:domain', getCompanyIdByDomain)
 
 export default companyRouter

@@ -1,6 +1,5 @@
 import { Document, Schema, Types } from 'mongoose'
 
-
 export interface IReport extends Document {
   Year: string
   Make: string

@@ -6,5 +6,4 @@ const checkSubDomainRouter = express.Router()
 // Create a new user
 checkSubDomainRouter.get('/:domain', checkSubDomain)
 
-
 export default checkSubDomainRouter
