@@ -121,7 +121,7 @@ jobs:
           MAIN_HOST: ${{ secrets.MAIN_HOST }}
           AWS_BUCKET_REGION: ${{ secrets.MAIN_HOST }}
           AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-          MAIL_USER: ${{ secrets.MAIL_USER }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
         run: |
           docker build \
@@ -133,7 +133,7 @@ jobs:
           --build-arg MAIN_HOST="$MAIN_HOST" \
           --build-arg AWS_BUCKET_REGION="$AWS_BUCKET_REGION" \
           --build-arg AWS_BUCKET_NAME="$AWS_BUCKET_NAME" \
-          --build-arg MAIL_USER="$MAIL_USER" \
+          --build-arg EMAIL_USER="$EMAIL_USER" \
           --build-arg EMAIL_PASS="$EMAIL_PASS" \
           -t ${{ vars.ECS_REGISTRY_ZIQI }}/crankbit-backend-${{ github.ref_name }}:latest \
           -t ${{ vars.ECS_REGISTRY_ZIQI }}/crankbit-backend-${{ github.ref_name }}:${{ github.sha }} .
